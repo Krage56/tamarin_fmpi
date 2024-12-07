@@ -7,8 +7,7 @@ rule Client_Step_1:
 let
     pk_C = pk(~pr_C)
     g_x = 'g'^(~x)
-
-in 
+in
     [
         Fr(~pr_C),
         Fr(~x)
@@ -17,7 +16,7 @@ in
         Send_1($Client, $Server, <pk_C, g_x>)
     ]->
     [
-        Out(pk_C, g_x),
+        Out(<pk_C, g_x>),
         !Client_Step_1(~pr_C, pk_C, ~x, g_x)
     ]
 
@@ -33,14 +32,14 @@ in
     [
         Fr(~pr_S),
         Fr(~y),
-        In(pk_C, g_x)
+        In(<pk_C, g_x>)
     ]
     --[
         Receive_1($Server, $Client, <pk_C, g_x>),
         Send_2($Server, $Client, <pk_S, g_y, serv_mess_sign>)
     ]->
     [
-        !Serv_Step_1(~pr_S, pk_S, ~y, g_y, g_x, server_key),
+        !Serv_Step_1(~pr_S, pk_S, pk_C, ~y, g_y, g_x, server_key),
         Out(<pk_S, g_y, serv_mess_sign>)
     ]
 
@@ -71,7 +70,7 @@ let
     clnt_mess = <g_y, g_x, pk_S>
 in 
     [
-        !Serv_Step_1(~pr_S, pk_S, ~y, g_y, g_x, server_key),
+        !Serv_Step_1(~pr_S, pk_S, pk_C, ~y, g_y, g_x, server_key),
         In(clnt_mess_sign)
     ]
     --[
@@ -82,3 +81,11 @@ in
     [
         !Serv_Step_2(pk_C)
     ]
+
+lemma executable_Finished:
+    exists-trace
+    "Ex Client Server key #i #j. 
+        Client_Finished(Client, key) @i & 
+        Server_Finished(Server, key) @j
+    "
+end
