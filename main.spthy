@@ -82,10 +82,28 @@ in
         !Serv_Step_2(pk_C)
     ]
 
+restriction Equality:
+    "All x y #i. Eq(x,y) @i ==> x = y"
+
+/* 
+Cуществует сервер, клиент и сессионный ключ такие, что клиент
+смог установить соединение с сервером
+*/
 lemma executable_Finished:
     exists-trace
     "Ex Client Server key #i #j. 
         Client_Finished(Client, key) @i & 
         Server_Finished(Server, key) @j
     "
+/*
+Cуществует сервер, клиент и сообщение такое, что клиент
+отправил первое сообщение, и сервер его получил 
+*/
+lemma executable_1:
+    exists-trace
+    "Ex Client Server mess #i #j. 
+        Receive_1(Server, Client, mess) @i & 
+        Send_1(Client, Server, mess) @j
+    "
+
 end
