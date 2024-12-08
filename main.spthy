@@ -106,4 +106,14 @@ lemma executable_1:
         Send_1(Client, Server, mess) @j
     "
 
+/*
+Существует сервер, клиент и сообщение такое, что сервер
+отправил второе сообщение, и клиент его получил
+*/
+lemma executable_2:
+    exists-trace
+    "Ex Client Server mess #i #j. 
+        Receive_2(Server, Client, mess) @i & 
+        Send_2(Client, Server, mess) @j
+    "
 end
