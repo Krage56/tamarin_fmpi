@@ -127,4 +127,28 @@ lemma executable_3:
         Receive_3(Server, Client, mess) @i & 
         Send_3(Client, Server, mess) @j
     "
+/* 
+Для любого сервера, клиента и сессионного ключа, если клиент
+смог установить соединение с сервером, то противник не может
+узнать сессионный ключ
+*/
+lemma Key_secrecy:
+    all-traces
+    "All Client Server key 
+         #t1 #t2.
+    (
+        Client_Finished(Client, key) @t1 & 
+        Server_Finished(Server, key) @t2
+    )
+    ==>
+    (
+        not
+        (
+            Ex #k.
+            (
+                K(key) @ #k
+            )
+        )
+    )
+    "
 end
