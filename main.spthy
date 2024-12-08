@@ -157,7 +157,6 @@ lemma Key_secrecy:
 установить соединение с сервером и сервер получил первое
 сообщение, то его отправил именно клиент
 */
-
 lemma auth_1:
         "All Client Server mess key
                 #t1 #t2 #t.
@@ -173,4 +172,20 @@ lemma auth_1:
         */
         (Ex #j. Send_1(Client, Server, mess) @j & j<t)
         "
+/* 
+Для любого сервера, клиента и сообщения, если клиент смог
+установить соединение с сервером и клиент получил второе
+сообщение, то его отправил именно сервер
+*/
+lemma auth_2:
+    "All Client Server key mess 
+         #t1 #t2 #t. 
+    (
+        Client_Finished(Client, key) @t1 & 
+        Server_Finished(Server, key) @t2 &
+        Receive_2(Client, Server, mess) @t
+    )
+    ==> 
+        (Ex #j. Send_2(Server, Client, mess) @j & j<t)
+    "
 end
