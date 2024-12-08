@@ -188,4 +188,21 @@ lemma auth_2:
     ==> 
         (Ex #j. Send_2(Server, Client, mess) @j & j<t)
     "
+
+/*
+Для любого сервера, клиента и сообщения, если клиент смог
+установить соединение с сервером и сервер получил третье
+сообщение, то его отправил именно клиент
+*/
+lemma auth_3:
+    "All Client Server key mess 
+         #t1 #t2 #t. 
+    (
+        Client_Finished(Client, key) @t1 & 
+        Server_Finished(Server, key) @t2 &
+        Receive_3(Server, Client, mess) @t
+    )
+    ==> 
+        (Ex #j. Send_3(Client, Server, mess) @j & j<t)
+    "
 end
